@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonSpinner, IonThumbnail } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { FixturesService } from '../services/fixtures';
+import { StorageService } from '../services/storage';
 
 @Component({
   selector: 'app-tab2',
@@ -14,13 +15,31 @@ export class Tab2Page implements OnInit {
   fixtures: any[] = [];
   isLoading = true;
 
-  constructor(private fixturesService: FixturesService) {}
+  constructor(private fixturesService: FixturesService, private storageService: StorageService) {}
 
-  ngOnInit() {
-    this.fixturesService.getFixtures().subscribe((data: any) => {
-      this.fixtures = data.articles;
+  async ngOnInit() {
+    await this.loadFixtures();
+  }
+
+  async ionViewWillEnter() {
+    if (this.fixtures.length === 0) {
+      await this.loadFixtures();
+    }
+  }
+
+  async loadFixtures() {
+    this.isLoading = true;
+    const cached = await this.storageService.get('cachedFixtures');
+    if (cached) {
+      this.fixtures = cached;
       this.isLoading = false;
-    });
+    } else {
+      this.fixturesService.getFixtures().subscribe(async (data: any) => {
+        this.fixtures = data.articles;
+        await this.storageService.set('cachedFixtures', data.articles);
+        this.isLoading = false;
+      });
+    }
   }
 
 }

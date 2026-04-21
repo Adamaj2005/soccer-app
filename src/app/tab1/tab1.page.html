@@ -2,6 +2,9 @@
   <ion-toolbar>
     <ion-title>Soccer News</ion-title>
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="filterArticles()" placeholder="Search news..."></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
@@ -11,7 +14,7 @@
   </div>
 
   <ion-list *ngIf="!isLoading">
-    <ion-item *ngFor="let article of newsArticles" lines="full">
+    <ion-item *ngFor="let article of filteredArticles" lines="full" (click)="openArticle(article.url)" button>
       <ion-thumbnail slot="start">
         <img [src]="article.image" alt="news image"/>
       </ion-thumbnail>
@@ -19,8 +22,8 @@
         <h2>{{ article.title }}</h2>
         <p>{{ article.source.name }}</p>
       </ion-label>
-      <ion-button slot="end" fill="clear" (click)="saveArticle(article)">
-        <ion-icon name="bookmark-outline"></ion-icon>
+      <ion-button slot="end" fill="clear" (click)="$event.stopPropagation(); saveArticle(article)">
+        <ion-icon name="bookmarks-outline"></ion-icon>
       </ion-button>
     </ion-item>
   </ion-list>

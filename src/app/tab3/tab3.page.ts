@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonThumbnail, IonButton, IonIcon } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
-import { Storage } from '@ionic/storage-angular';
+import { StorageService } from '../services/storage';
 import { addIcons } from 'ionicons';
 import { trashOutline } from 'ionicons/icons';
 
@@ -15,18 +15,17 @@ export class Tab3Page {
 
   savedArticles: any[] = [];
 
-  constructor(private storage: Storage) {
+  constructor(private storageService: StorageService) {
     addIcons({ trashOutline });
   }
 
   async ionViewWillEnter() {
-    await this.storage.create();
-    this.savedArticles = await this.storage.get('savedArticles') || [];
+    this.savedArticles = await this.storageService.get('savedArticles') || [];
   }
 
   async removeArticle(article: any) {
     this.savedArticles = this.savedArticles.filter((a: any) => a.url !== article.url);
-    await this.storage.set('savedArticles', this.savedArticles);
+    await this.storageService.set('savedArticles', this.savedArticles);
   }
 
 }
