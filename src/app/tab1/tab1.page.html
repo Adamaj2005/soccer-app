@@ -19,6 +19,9 @@
         <h2>{{ article.title }}</h2>
         <p>{{ article.source.name }}</p>
       </ion-label>
+      <ion-button slot="end" fill="clear" (click)="saveArticle(article)">
+        <ion-icon name="bookmark-outline"></ion-icon>
+      </ion-button>
     </ion-item>
   </ion-list>
 

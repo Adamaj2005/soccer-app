@@ -5,9 +5,25 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Saved</ion-title>
-    </ion-toolbar>
-  </ion-header>
+
+  <div *ngIf="savedArticles.length === 0" style="text-align:center; margin-top:3rem;">
+    <p>No saved articles yet!</p>
+    <p>Tap the bookmark icon on any news article to save it.</p>
+  </div>
+
+  <ion-list *ngIf="savedArticles.length > 0">
+    <ion-item *ngFor="let article of savedArticles" lines="full">
+      <ion-thumbnail slot="start">
+        <img [src]="article.image" alt="news image"/>
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ article.title }}</h2>
+        <p>{{ article.source.name }}</p>
+      </ion-label>
+      <ion-button slot="end" fill="clear" color="danger" (click)="removeArticle(article)">
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
 </ion-content>
