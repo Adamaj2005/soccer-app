@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonThumbnail, IonSpinner, IonButton, IonIcon, IonSearchbar } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NewsService } from '../services/news';
+import { DataService } from '../services/data';
 import { StorageService } from '../services/storage';
 import { addIcons } from 'ionicons';
-import { bookmarksOutline } from 'ionicons/icons';
+import { bookmarksOutline, shareOutline } from 'ionicons/icons';
+import { Share } from '@capacitor/share';
 
 @Component({
   selector: 'app-tab1',
@@ -20,26 +21,18 @@ export class Tab1Page implements OnInit {
   searchTerm: string = '';
   isLoading = true;
 
-  constructor(private newsService: NewsService, private storageService: StorageService) {
-    addIcons({ bookmarksOutline });
+  constructor(private dataService: DataService, private storageService: StorageService) {
+    addIcons({ bookmarksOutline, shareOutline });
   }
 
   ngOnInit() {
-    this.newsService.getSoccerNews().subscribe((data: any) => {
-      this.newsArticles = data.articles;
-      this.filteredArticles = data.articles;
-      this.isLoading = false;
-    });
-  }
-
-  ionViewWillEnter() {
-    if (this.newsArticles.length === 0) {
-      this.newsService.getSoccerNews().subscribe((data: any) => {
-        this.newsArticles = data.articles;
-        this.filteredArticles = data.articles;
+    this.dataService.news$.subscribe((articles) => {
+      if (articles.length > 0) {
+        this.newsArticles = articles;
+        this.filteredArticles = articles;
         this.isLoading = false;
-      });
-    }
+      }
+    });
   }
 
   filterArticles() {
@@ -58,6 +51,15 @@ export class Tab1Page implements OnInit {
     } else {
       alert('Already saved!');
     }
+  }
+
+  async shareArticle(article: any) {
+    await Share.share({
+      title: article.title,
+      text: article.description,
+      url: article.url,
+      dialogTitle: 'Share article',
+    });
   }
 
   openArticle(url: string) {

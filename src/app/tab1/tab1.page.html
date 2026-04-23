@@ -22,6 +22,9 @@
         <h2>{{ article.title }}</h2>
         <p>{{ article.source.name }}</p>
       </ion-label>
+      <ion-button slot="end" fill="clear" (click)="$event.stopPropagation(); shareArticle(article)">
+        <ion-icon name="share-outline"></ion-icon>
+      </ion-button>
       <ion-button slot="end" fill="clear" (click)="$event.stopPropagation(); saveArticle(article)">
         <ion-icon name="bookmarks-outline"></ion-icon>
       </ion-button>
