@@ -18,10 +18,8 @@ export class Tab2Page implements OnInit {
 
   ngOnInit() {
     this.dataService.fixtures$.subscribe((articles) => {
-      if (articles.length > 0) {
-        this.fixtures = articles;
-        this.isLoading = false;
-      }
+      this.fixtures = articles;
+      this.isLoading = false;
     });
   }
 

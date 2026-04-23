@@ -27,11 +27,9 @@ export class Tab1Page implements OnInit {
 
   ngOnInit() {
     this.dataService.news$.subscribe((articles) => {
-      if (articles.length > 0) {
-        this.newsArticles = articles;
-        this.filteredArticles = articles;
-        this.isLoading = false;
-      }
+      this.newsArticles = articles;
+      this.filteredArticles = articles;
+      this.isLoading = false;
     });
   }
 
