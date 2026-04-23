@@ -25,39 +25,54 @@ export class Tab1Page implements OnInit {
     addIcons({ bookmarksOutline, shareOutline });
   }
 
-  ngOnInit() {
-    this.dataService.news$.subscribe((articles) => {
+ ngOnInit() {
+  this.dataService.news$.subscribe({
+    next: (articles: any[]) => {
       this.newsArticles = articles;
       this.filteredArticles = articles;
       this.isLoading = false;
-    });
-  }
+    },
+    error: () => {
+      this.isLoading = false;
+    }
+  });
+}
 
   filterArticles() {
+    const term = this.searchTerm.toLowerCase();
     this.filteredArticles = this.newsArticles.filter(article =>
-      article.title.toLowerCase().includes(this.searchTerm.toLowerCase())
+      article.title?.toLowerCase().includes(term) ?? false
     );
   }
 
   async saveArticle(article: any) {
-    const saved = await this.storageService.get('savedArticles') || [];
-    const exists = saved.find((a: any) => a.url === article.url);
-    if (!exists) {
-      saved.push(article);
-      await this.storageService.set('savedArticles', saved);
-      alert('Article saved!');
-    } else {
-      alert('Already saved!');
+    try {
+      const saved = await this.storageService.get('savedArticles') || [];
+      const exists = saved.find((a: any) => a.link === article.link);
+      if (!exists) {
+        saved.push(article);
+        await this.storageService.set('savedArticles', saved);
+        alert('Article saved!');
+      } else {
+        alert('Already saved!');
+      }
+    } catch {
+      alert('Could not save article. Please try again.');
     }
   }
 
   async shareArticle(article: any) {
-    await Share.share({
-      title: article.title,
-      text: article.description,
-      url: article.url,
-      dialogTitle: 'Share article',
-    });
+    try {
+      await Share.share({
+        title: article.title,
+        text: article.description,
+        url: article.link,
+        dialogTitle: 'Share article',
+      });
+    } catch {
+      // Web Share API unavailable (desktop browser) — open the article instead
+      if (article.link) window.open(article.link, '_blank');
+    }
   }
 
   openArticle(url: string) {

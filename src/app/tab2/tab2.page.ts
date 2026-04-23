@@ -16,11 +16,16 @@ export class Tab2Page implements OnInit {
 
   constructor(private dataService: DataService) {}
 
-  ngOnInit() {
-    this.dataService.fixtures$.subscribe((articles) => {
+ ngOnInit() {
+  this.dataService.fixtures$.subscribe({
+    next: (articles: any[]) => {
       this.fixtures = articles;
       this.isLoading = false;
-    });
+    },
+    error: () => {
+      this.isLoading = false;
+    }
+  });
+}
   }
 
-}

@@ -14,11 +14,11 @@
   <ion-list *ngIf="savedArticles.length > 0">
     <ion-item *ngFor="let article of savedArticles" lines="full">
       <ion-thumbnail slot="start">
-        <img [src]="article.image" alt="news image"/>
+        <img [src]="article.image_url" alt="news image" onerror="this.src='assets/icon/favicon.png'"/>
       </ion-thumbnail>
       <ion-label>
         <h2>{{ article.title }}</h2>
-        <p>{{ article.source.name }}</p>
+        <p>{{ article.source_id }}</p>
       </ion-label>
       <ion-button slot="end" fill="clear" color="danger" (click)="removeArticle(article)">
         <ion-icon name="trash-outline"></ion-icon>

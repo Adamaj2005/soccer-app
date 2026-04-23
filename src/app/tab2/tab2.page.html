@@ -13,11 +13,11 @@
   <ion-list *ngIf="!isLoading">
     <ion-item *ngFor="let item of fixtures" lines="full">
       <ion-thumbnail slot="start">
-        <img [src]="item.image" alt="fixture image"/>
+        <img [src]="item.image_url" alt="fixture image" onerror="this.src='assets/icon/favicon.png'"/>
       </ion-thumbnail>
       <ion-label>
         <h2>{{ item.title }}</h2>
-        <p>{{ item.source.name }}</p>
+        <p>{{ item.source_id }}</p>
       </ion-label>
     </ion-item>
   </ion-list>

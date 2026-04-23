@@ -3,7 +3,7 @@
     <ion-title>Soccer News</ion-title>
   </ion-toolbar>
   <ion-toolbar>
-    <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="filterArticles()" placeholder="Search news..."></ion-searchbar>
+    <ion-searchbar [(ngModel)]="searchTerm" (ngModelChange)="filterArticles()" placeholder="Search news..." color="primary"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
@@ -14,13 +14,13 @@
   </div>
 
   <ion-list *ngIf="!isLoading">
-    <ion-item *ngFor="let article of filteredArticles" lines="full" (click)="openArticle(article.url)" button>
+    <ion-item *ngFor="let article of filteredArticles" lines="full" (click)="openArticle(article.link)" button>
       <ion-thumbnail slot="start">
-        <img [src]="article.image" alt="news image"/>
+        <img [src]="article.image_url" alt="news image" onerror="this.src='assets/icon/favicon.png'"/>
       </ion-thumbnail>
       <ion-label>
         <h2>{{ article.title }}</h2>
-        <p>{{ article.source.name }}</p>
+        <p>{{ article.source_id }}</p>
       </ion-label>
       <ion-button slot="end" fill="clear" (click)="$event.stopPropagation(); shareArticle(article)">
         <ion-icon name="share-outline"></ion-icon>

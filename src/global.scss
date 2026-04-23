@@ -1,3 +1,8 @@
+/* Prevent invisible (transitioning-out) pages from swallowing pointer events */
+.ion-page-invisible {
+  pointer-events: none;
+}
+
 ion-toolbar {
   --background: #1a1a2e;
   --color: #ffffff;
@@ -25,7 +30,13 @@ ion-tab-button {
 }
 
 ion-searchbar {
-  --background: #0f3460;
-  --color: #ffffff;
-  --placeholder-color: #888;
+  --color: #ffffff !important;
+  --placeholder-color: #aaaaaa !important;
+  --icon-color: #ffffff !important;
+  --background: #1a1a2e !important;
+}
+
+.searchbar-input {
+  background: #1a1a2e !important;
+  color: #ffffff !important;
 }

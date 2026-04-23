@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonThumbnail, IonButton, IonIcon } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { StorageService } from '../services/storage';
+import { ViewWillEnter } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { trashOutline } from 'ionicons/icons';
 
@@ -11,7 +12,7 @@ import { trashOutline } from 'ionicons/icons';
   styleUrls: ['tab3.page.scss'],
   imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonThumbnail, IonButton, IonIcon, CommonModule],
 })
-export class Tab3Page {
+export class Tab3Page implements OnInit, ViewWillEnter {
 
   savedArticles: any[] = [];
 
@@ -19,12 +20,20 @@ export class Tab3Page {
     addIcons({ trashOutline });
   }
 
-  async ionViewWillEnter() {
+  ngOnInit() {
+    this.loadSaved();
+  }
+
+  ionViewWillEnter() {
+    this.loadSaved();
+  }
+
+  async loadSaved() {
     this.savedArticles = await this.storageService.get('savedArticles') || [];
   }
 
   async removeArticle(article: any) {
-    this.savedArticles = this.savedArticles.filter((a: any) => a.url !== article.url);
+    this.savedArticles = this.savedArticles.filter((a: any) => a.link !== article.link);
     await this.storageService.set('savedArticles', this.savedArticles);
   }
 
