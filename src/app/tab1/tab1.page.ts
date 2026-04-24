@@ -70,7 +70,6 @@ export class Tab1Page implements OnInit {
         dialogTitle: 'Share article',
       });
     } catch {
-      // Web Share API unavailable (desktop browser) — open the article instead
       if (article.link) window.open(article.link, '_blank');
     }
   }
